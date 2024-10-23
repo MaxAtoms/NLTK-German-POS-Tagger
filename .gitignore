@@ -164,3 +164,4 @@ cython_debug/
 # Project specific directories and files
 datasets/*
 taggers/*
+corpora/*
