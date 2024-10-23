@@ -8,6 +8,7 @@
 #
 # This module is provided under the terms of the MIT License.
 
+import os
 import json
 import logging
 import random
@@ -475,8 +476,8 @@ def load_conll(file_path, percentage=100):
 
 if __name__ == "__main__":
     # _get_pretrain_model()
-    path.append('D:\\PC_SD\\1-Uni\\7. Semester\\NLP\\FINAL project\\program')
-    train_file = "tiger_release_aug07.corrected.16012013.Conll09"
+    path.append(os.getcwd())
+    train_file = "corpora/tiger_release_aug07.corrected.16012013.conll09"
 
     save_loc = TRAINED_TAGGER_PATH
 

@@ -44,10 +44,10 @@ def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuf
     return total_correct, total_tags, accuracy
 
 if __name__ == "__main__":
-    path.append('D:\\PC_SD\\1-Uni\\7. Semester\\NLP\\FINAL project\\program')
+    path.append(os.getcwd())
     
     #which model to load?
-    data = 3
+    data = 2
     model = 1
     
     tagger = PerceptronTagger(model, data, load=True, lang='deu')
