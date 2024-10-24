@@ -1,0 +1,5 @@
+name: 'Train'
+description: 'Run POS tagger training and evaluation'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

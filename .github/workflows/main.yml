@@ -1,0 +1,46 @@
+on: [push]
+env:
+  RELEASE: "Test"
+  HOME: "/home/pipuser/"
+
+jobs:
+  train_job:
+    runs-on: ubuntu-latest
+    name: Train and eval
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Execute
+        uses: ./.github/actions/pos
+        env:
+          TQDM_DISABLE: 1
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace_artifacts
+          path: ${{ github.workspace }}
+      - name: Remove pre-existing release
+        run: gh release delete --cleanup-tag $RELEASE
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE }}
+          release_name: Release ${{ env.RELEASE }}
+          draft: false
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./results.csv
+          asset_name: results.csv
+          asset_content_type: text/csv
