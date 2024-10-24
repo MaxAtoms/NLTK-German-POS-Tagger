@@ -1,3 +1,4 @@
+import csv
 import argparse
 from german_tagger import PerceptronTagger, load_conll
 from nltk.data import path
@@ -62,6 +63,16 @@ if __name__ == "__main__":
     shuffle = False
     
     correct, tags, accuracy = evaluate_model(tagger, test_file, test_file_from_training, args.data, args.model,shuffle, percentage=20)
+
+    filename = 'results.csv'
+    file_exists = os.path.isfile(filename)
+    with open(filename, mode='a', newline='') as file:
+        fieldnames = ['name', 'accuracy', 'correct_tags', 'total_tags']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow({'name': args.data, 'accuracy': accuracy, 'correct_tags': correct, 'total_tags': tags})
+
     print(f"Total tags: {tags}")
     print(f"Correct tags: {correct}")
     print(f"Model Accuracy: {accuracy * 100:.2f}%")
