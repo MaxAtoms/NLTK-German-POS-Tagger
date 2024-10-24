@@ -1,24 +1,21 @@
 # NLTK-German-POS-Tagger
 
-## Requirements
+Results are automatically generated via a GitHub Action and published in [Releases](https://github.com/MaxAtoms/NLTK-German-POS-Tagger/releases/).
 
-Make sure you have a working Python and [Pipenv](https://pipenv.pypa.io/en/latest/) installation.
+## Running directly on your machine
 
-## Setup
+Make sure you have a working Python and [Pipenv](https://pipenv.pypa.io/en/latest/) installation. Execute `./entrypoint.sh`.
 
-In the project directory, run `pipenv install`.
-Obtain the TIGER Korpus:
+## Manual Training
 
-```
-wget https://www.ims.uni-stuttgart.de/documents/ressourcen/korpora/tiger-corpus/download/tigercorpus-2.2.conll09.tar.gz -P corpora/
-tar -xzvf corpora/tigercorpus-2.2.conll09.tar.gz -C corpora/
-```
+More info: `pipenv run python ./german_tagger.py --help`
 
-## Training
+## Manual Evaluation
 
-Run: `pipenv run python ./german_tagger.py`
+More info: `pipenv run python ./evaluator.py --help`
 
-## Evaluation
+## Execution in Docker
 
-Run: `pipenv run python ./evaluator.py`
-
+Build the container: `docker build -t pos-tagger:latest .`
+Run it in this repository: `docker run -it -v $(pwd):/tmp pos-tagger:latest`
+Opening a shell for manual experiments: `docker run -it -v $(pwd):/tmp --entrypoint /bin/bash pos-tagger:latest`
