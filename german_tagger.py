@@ -9,6 +9,7 @@
 # This module is provided under the terms of the MIT License.
 
 import os
+import argparse
 import json
 import logging
 import random
@@ -475,6 +476,14 @@ def load_conll(file_path, percentage=100):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
+
+    parser.add_argument("--data", type=int, default=1, help="What dataset to train")
+    parser.add_argument("--iter", type=int, default=1, help="Number of iterations")
+    parser.add_argument("--percentage", type=int, default=90, help="Percentage of the dataset used for training")
+
+    args = parser.parse_args()
+
     # _get_pretrain_model()
     path.append(os.getcwd())
     train_file = "corpora/tiger_release_aug07.corrected.16012013.conll09"
@@ -483,15 +492,12 @@ if __name__ == "__main__":
 
     createfiles = True # Create dataset
     train_model = True # and/or Train model
-    
-    
-    data = 1 #If createfiles is False, what dataset to train
-    percentage = 80 # which train/test split
-    
-    
     #print("NLTK data paths:")
     #for p in path:
     #    print(p)
     # Train the tagger on the German data
-    german_tagger = train_perceptron_tagger_german(train_file, data, train_model, save_loc=save_loc, nr_iter=1, percentage=percentage, createfiles=createfiles)    
+
+    print(f'Training dataset "{args.data}" for {args.iter} iteration(s) using {args.percentage}% of the dataset')
+
+    german_tagger = train_perceptron_tagger_german(train_file, args.data, train_model, save_loc=save_loc, nr_iter=args.iter, percentage=args.percentage, createfiles=createfiles)    
     print("Training completed and model saved.")

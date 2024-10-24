@@ -1,3 +1,4 @@
+import argparse
 from german_tagger import PerceptronTagger, load_conll
 from nltk.data import path
 from tqdm import tqdm 
@@ -45,17 +46,22 @@ def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuf
 
 if __name__ == "__main__":
     path.append(os.getcwd())
+
+    parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
+
+    parser.add_argument("--data", type=int, default=1, help="What dataset to use")
+    parser.add_argument("--model", type=int, default=1, help="Which model to use")
+
+    args = parser.parse_args()
     
-    #which model to load?
-    data = 2
-    model = 1
+    print(f'Loading dataset {args.data} and model {args.model}')
     
-    tagger = PerceptronTagger(model, data, load=True, lang='deu')
+    tagger = PerceptronTagger(args.model, args.data, load=True, lang='deu')
     test_file = "tiger_release_aug07.corrected.16012013.Conll09" 
     test_file_from_training = True
     shuffle = False
     
-    correct, tags, accuracy = evaluate_model(tagger, test_file, test_file_from_training, data, model,shuffle, percentage=20)
+    correct, tags, accuracy = evaluate_model(tagger, test_file, test_file_from_training, args.data, args.model,shuffle, percentage=20)
     print(f"Total tags: {tags}")
     print(f"Correct tags: {correct}")
     print(f"Model Accuracy: {accuracy * 100:.2f}%")
