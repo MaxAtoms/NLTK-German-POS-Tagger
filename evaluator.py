@@ -51,15 +51,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
 
     parser.add_argument("--data", type=str, default=1, help="What dataset to use")
-    parser.add_argument("--testfile", type=str, default="tiger_release_aug07.corrected.16012013.Conll09", help="What dataset to use")
+    parser.add_argument("--testfile", type=str, help="What dataset to use")
     parser.add_argument("--model", type=int, default=1, help="Which model to use")
+    parser.add_argument("--description", type=str, default="", help="Description that gets added to the result file")
 
     args = parser.parse_args()
+
+    print(args.testfile)
     
     print(f'Loading dataset {args.data} and model {args.model}')
     
     tagger = PerceptronTagger(args.model, args.data, load=True, lang='deu')
-    test_file_from_training = True
+    test_file_from_training = True if args.testfile == None else False
     shuffle = False
     
     correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.model,shuffle, percentage=20)
@@ -67,11 +70,16 @@ if __name__ == "__main__":
     filename = 'results.csv'
     file_exists = os.path.isfile(filename)
     with open(filename, mode='a', newline='') as file:
-        fieldnames = ['name', 'accuracy', 'correct_tags', 'total_tags']
+        fieldnames = ['name', 'accuracy', 'correct_tags', 'total_tags', 'description']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
-        writer.writerow({'name': args.data, 'accuracy': accuracy, 'correct_tags': correct, 'total_tags': tags})
+        writer.writerow({
+            'name': args.data, 
+            'accuracy': accuracy, 
+            'correct_tags': correct,
+            'total_tags': tags,
+            'description': args.description})
 
     print(f"Total tags: {tags}")
     print(f"Correct tags: {correct}")
