@@ -16,6 +16,6 @@ More info: `pipenv run python ./evaluator.py --help`
 
 ## Execution in Docker
 
-Build the container: `docker build -t pos-tagger:latest .`
-Run it in this repository: `docker run -it -v $(pwd):/tmp pos-tagger:latest`
-Opening a shell for manual experiments: `docker run -it -v $(pwd):/tmp --entrypoint /bin/bash pos-tagger:latest`
+- Build the image: `docker build -t pos-tagger:latest .`
+- Run a container in this repository: `docker run -it -v $(pwd):/tmp pos-tagger:latest`
+- Opening a shell for manual experiments: `docker run -it -v $(pwd):/tmp --entrypoint /bin/bash pos-tagger:latest`
