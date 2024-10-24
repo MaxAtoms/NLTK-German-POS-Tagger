@@ -261,7 +261,7 @@ class PerceptronTagger(TaggerI):
             self.save_to_json(save_loc, data)
     
     def save_to_json(self, loc, data, lang="deu"):
-        base_dir = os.path.join(loc, f"averaged_perceptron_tagger_{lang}/trained_on_data_{data}")
+        base_dir = os.path.join(loc, f"averaged_perceptron_tagger_{lang}/{data}")
         
         if not os.path.exists(base_dir):
             os.makedirs(base_dir)
@@ -286,7 +286,7 @@ class PerceptronTagger(TaggerI):
 
 
     def load_from_json(self, model, dataset, lang="deu"):
-        loc = find(f"taggers/averaged_perceptron_tagger_{lang}/trained_on_data_{dataset}/model{model}/")
+        loc = find(f"taggers/averaged_perceptron_tagger_{lang}/{dataset}/model{model}/")
 
         with open(loc + TAGGER_JSONS[lang]["weights"]) as fin:
             print("Loading weights...")
@@ -406,13 +406,7 @@ def train_perceptron_tagger_german(train_file, data, train_model=True, save_loc=
         if not os.path.exists("datasets"):
             os.makedirs("datasets")
 
-        existing_folders = [f for f in os.listdir("datasets") if f.startswith("data") and os.path.isdir(os.path.join("datasets", f))]
-        next_number = max(
-            [int(f.split('data')[-1]) for f in existing_folders] + [0]
-        ) + 1
-
-        folder_path = os.path.join("datasets", f"data{next_number}")
-        data = next_number
+        folder_path = os.path.join("datasets", data)
         os.makedirs(folder_path)
 
 
@@ -478,7 +472,10 @@ def load_conll(file_path, percentage=100):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
 
-    parser.add_argument("--data", type=int, default=1, help="What dataset to train")
+    parser.add_argument("--train", type=bool, default=True, help="Execute training")
+    parser.add_argument("--create", type=bool, default=True, help="Create dataset")
+    parser.add_argument("--data", type=str, required=True, help="Name")
+    parser.add_argument("--dataset", type=str, default="corpora/tiger_release_aug07.corrected.16012013.conll09", help="Dataset filename")
     parser.add_argument("--iter", type=int, default=1, help="Number of iterations")
     parser.add_argument("--percentage", type=int, default=90, help="Percentage of the dataset used for training")
 
@@ -486,18 +483,10 @@ if __name__ == "__main__":
 
     # _get_pretrain_model()
     path.append(os.getcwd())
-    train_file = "corpora/tiger_release_aug07.corrected.16012013.conll09"
 
     save_loc = TRAINED_TAGGER_PATH
 
-    createfiles = True # Create dataset
-    train_model = True # and/or Train model
-    #print("NLTK data paths:")
-    #for p in path:
-    #    print(p)
-    # Train the tagger on the German data
-
     print(f'Training dataset "{args.data}" for {args.iter} iteration(s) using {args.percentage}% of the dataset')
 
-    german_tagger = train_perceptron_tagger_german(train_file, args.data, train_model, save_loc=save_loc, nr_iter=args.iter, percentage=args.percentage, createfiles=createfiles)    
+    german_tagger = train_perceptron_tagger_german(args.dataset, args.data, args.train, save_loc=save_loc, nr_iter=args.iter, percentage=args.percentage, createfiles=args.create)    
     print("Training completed and model saved.")

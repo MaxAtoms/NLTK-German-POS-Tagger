@@ -21,7 +21,7 @@ def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuf
         test_sentences = load_conll(test_file, percentage=percentage)
     else:
         try:
-            folder_path = os.path.join("datasets", f"data{data}")
+            folder_path = os.path.join("datasets", f"{data}")
             test_file_path = os.path.join(folder_path, "test_sentences.txt")
             test_sentences = load_test_sentences_from_file(test_file_path, shuffle)
         except FileNotFoundError:
@@ -50,7 +50,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
 
-    parser.add_argument("--data", type=int, default=1, help="What dataset to use")
+    parser.add_argument("--data", type=str, default=1, help="What dataset to use")
+    parser.add_argument("--testfile", type=str, default="tiger_release_aug07.corrected.16012013.Conll09", help="What dataset to use")
     parser.add_argument("--model", type=int, default=1, help="Which model to use")
 
     args = parser.parse_args()
@@ -58,11 +59,10 @@ if __name__ == "__main__":
     print(f'Loading dataset {args.data} and model {args.model}')
     
     tagger = PerceptronTagger(args.model, args.data, load=True, lang='deu')
-    test_file = "tiger_release_aug07.corrected.16012013.Conll09" 
     test_file_from_training = True
     shuffle = False
     
-    correct, tags, accuracy = evaluate_model(tagger, test_file, test_file_from_training, args.data, args.model,shuffle, percentage=20)
+    correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.model,shuffle, percentage=20)
 
     filename = 'results.csv'
     file_exists = os.path.isfile(filename)
