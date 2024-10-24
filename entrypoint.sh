@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-# Work-around for GitHub action issue :(
-pip install --user pipenv
+# Work-around for GitHub Action problem :(
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+  pip install --user pipenv
+fi
 
 pipenv install
 ./get_corpora.sh
-
 ./train_eval.sh
