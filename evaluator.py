@@ -19,7 +19,6 @@ def load_test_sentences_from_file(file_path, shuffle=True):
 def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuffle, percentage=100):
     if(not test_file_from_training):
         test_sentences, ignore_second_half_of_split = load_conll(test_file, percentage=percentage)
-        print(test_sentences)
     else:
         try:
             folder_path = os.path.join("datasets", f"{data}")
