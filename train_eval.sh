@@ -34,7 +34,7 @@ evaluate() {
   print_dashes
   echo "Result for training on TIGER Korpus and validation on Open Subtitles"
   pipenv run python ./evaluator.py --data "tiger_train90_val10" --testfile "corpora/opensubtitles.conll" \
-    --model 1 --description "Training: 90% of TIGER Korpus, Validation: "
+    --model 1 --description "Training: 90% of TIGER Korpus, Validation: Open Subtitles"
   print_dashes
   echo "Result for training on TIGER Korpus and validation on Christian sermons"
   pipenv run python ./evaluator.py --data "tiger_train90_val10" --testfile "corpora/sermononline.conll" \
