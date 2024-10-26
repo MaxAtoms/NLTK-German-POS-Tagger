@@ -29,5 +29,5 @@ def load_conll(file_path, percentage=100):
 train_sents, test_sents = load_conll('../corpora/tiger_release_aug07.corrected.16012013.conll09', 90)
 
 tagger = ClassifierBasedGermanTagger(train=train_sents)
-accuracy = tagger.evaluate(test_sents)
+accuracy = tagger.accuracy(test_sents)
 print(accuracy)
