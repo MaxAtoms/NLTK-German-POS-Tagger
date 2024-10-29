@@ -16,9 +16,9 @@ def load_test_sentences_from_file(file_path, shuffle=True):
         random.shuffle(test_sentences)
     return test_sentences
 
-def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuffle, percentage=100):
+def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuffle, percentage):
     if(not test_file_from_training):
-        test_sentences = load_conll(test_file, percentage=percentage)
+        test_sentences = load_conll(test_file, percentage=percentage)[0]
     else:
         try:
             folder_path = os.path.join("datasets", f"{data}")
@@ -51,21 +51,23 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
 
     parser.add_argument("--data", type=str, default=1, help="What dataset to use")
-    parser.add_argument("--testfile", type=str, help="What dataset to use")
+    parser.add_argument("--testfile", type=str, help="If we want a specific test file, using a different corpus than the training corpus (conll format)")
     parser.add_argument("--model", type=int, default=1, help="Which model to use")
     parser.add_argument("--description", type=str, default="", help="Description that gets added to the result file")
+    parser.add_argument("--percentage", type=float, default=10, help="Percentage of the test data to use (if using a specific test file)")
 
     args = parser.parse_args()
-
-    print(args.testfile)
     
     print(f'Loading dataset {args.data} and model {args.model}')
     
     tagger = PerceptronTagger(args.model, args.data, load=True, lang='deu')
+    
+    # Use specific test file or use the test file from training
     test_file_from_training = True if args.testfile == None else False
+    print(test_file_from_training)
     shuffle = False
     
-    correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.model,shuffle, percentage=20)
+    correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.model,shuffle, args.percentage)
 
     filename = 'results.csv'
     file_exists = os.path.isfile(filename)
