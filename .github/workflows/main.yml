@@ -7,6 +7,7 @@ jobs:
   train_job:
     runs-on: ubuntu-latest
     name: Train and eval
+    if: "contains(github.event.head_commit.message, '[build]')"
     permissions:
       contents: write
     steps:
@@ -34,7 +35,7 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE }}
           release_name: Release ${{ env.RELEASE }}
-          draft: false
+          draft: true
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
