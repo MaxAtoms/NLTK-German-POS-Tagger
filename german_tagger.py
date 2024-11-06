@@ -426,7 +426,7 @@ def train_perceptron_tagger_german(train_file, data, train_model=True, save_loc=
         print(f"Training sentences written to {train_file_path}")
         print(f"Testing sentences written to {test_file_path}")
     else:
-        folder_path = os.path.join("datasets", f"data{data}")
+        folder_path = os.path.join("datasets", f"{data}")
         train_file_path = os.path.join(folder_path, "train_sentences.txt")
         train_sentences = load_train_sentences_from_file(train_file_path)
         random.shuffle(train_sentences)
@@ -472,8 +472,8 @@ def load_conll(file_path, percentage=100):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="POS Tagger Training Arguments")
 
-    parser.add_argument("--train", type=bool, default=True, help="Execute training")
-    parser.add_argument("--create", type=bool, default=True, help="Create dataset")
+    parser.add_argument("--train", type=int, choices=[0, 1], default=1, help="Execute training (1 for True, 0 for False)")
+    parser.add_argument("--create", type=int, choices=[0, 1], default=1, help="Create dataset (1 for True, 0 for False)")
     parser.add_argument("--data", type=str, required=True, help="Name")
     parser.add_argument("--dataset", type=str, default="corpora/tiger_release_aug07.corrected.16012013.conll09", help="Dataset filename")
     parser.add_argument("--iter", type=int, default=1, help="Number of iterations")

@@ -16,7 +16,7 @@ def load_test_sentences_from_file(file_path, shuffle=True):
         random.shuffle(test_sentences)
     return test_sentences
 
-def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuffle, percentage):
+def evaluate_model(tagger, test_file, test_file_from_training, data, tagdict, shuffle, percentage):
     if(not test_file_from_training):
         test_sentences = load_conll(test_file, percentage=percentage)[0]
     else:
@@ -34,7 +34,7 @@ def evaluate_model(tagger, test_file, test_file_from_training, data, model, shuf
         for sentence in test_sentences:
             words, true_tags = zip(*sentence)
             
-            predicted_tags = [tag for word, tag in tagger.tag(words)]
+            predicted_tags = [tag for _, tag in tagger.tag(words, use_tagdict=tagdict)]
             #for word, tag, pred_tag in zip(words, true_tags, predicted_tags):
             #    if tag != pred_tag:
             #        print(f"Word: {word}, True Tag: {tag}, Predicted Tag: {pred_tag}")
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=int, default=1, help="Which model to use")
     parser.add_argument("--description", type=str, default="", help="Description that gets added to the result file")
     parser.add_argument("--percentage", type=float, default=10, help="Percentage of the test data to use (if using a specific test file)")
-
+    parser.add_argument("--tagdict", type=int, choices=[0, 1], default=1, help="If to use tagdict or not")
     args = parser.parse_args()
     
     print(f'Loading dataset {args.data} and model {args.model}')
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     print(test_file_from_training)
     shuffle = False
     
-    correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.model,shuffle, args.percentage)
+    correct, tags, accuracy = evaluate_model(tagger, args.testfile, test_file_from_training, args.data, args.tagdict,shuffle, args.percentage)
 
     filename = 'results.csv'
     file_exists = os.path.isfile(filename)
