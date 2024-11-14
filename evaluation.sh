@@ -22,9 +22,10 @@ tagdict=(
   "--tagdict=1"
   )
 
+echo "Starting evaluation..."
 
 # Evaluate 90/10 training-test-split on TIGER Korpus
-parallel --joblog evaluation-log1 --progress eval pipenv run python evaluator.py --data=tiger_tagger {} {} ">" /dev/null ::: "${models[@]}" ::: "${tagdict[@]}"
+parallel --joblog evaluation-log1 eval pipenv run python evaluator.py --data=tiger_tagger {} {} ">" /dev/null ::: "${models[@]}" ::: "${tagdict[@]}"
 
 # Evaluate the fully trained model on different corpora
-parallel --joblog evaluation-log2 --progress eval pipenv run python evaluator.py --data=universal_tagger --percentage=100 {} {} ">" /dev/null ::: "${datasets[@]}" ::: "${models[@]}"
+parallel --joblog evaluation-log2 eval pipenv run python evaluator.py --data=universal_tagger --percentage=100 {} {} ">" /dev/null ::: "${datasets[@]}" ::: "${models[@]}"

@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN useradd -ms /bin/bash pipuser
 USER pipuser
 
-ENV LANG en_US.UTF-8
+ENV LANG C
+
 ENV PATH "$PATH:/home/pipuser/.local/bin" 
 RUN pip install --user pipenv
 WORKDIR /tmp/

@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN useradd -u 1001 -m pipuser
 USER pipuser
 
-ENV LANG en_US.UTF-8
+ENV LANG C
+
 ENV PATH "$PATH:/github/home/.local/bin" 
 WORKDIR /tmp/
 
