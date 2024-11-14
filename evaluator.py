@@ -53,9 +53,9 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, default=1, help="What dataset to use")
     parser.add_argument("--testfile", type=str, help="If we want a specific test file, using a different corpus than the training corpus (conll format)")
     parser.add_argument("--model", type=int, default=1, help="Which model to use")
-    parser.add_argument("--description", type=str, default="", help="Description that gets added to the result file")
     parser.add_argument("--percentage", type=float, default=10, help="Percentage of the test data to use (if using a specific test file)")
     parser.add_argument("--tagdict", type=int, choices=[0, 1], default=1, help="If to use tagdict or not")
+    parser.add_argument("--description", type=str, default="", help="Description that gets added to the result file")
     args = parser.parse_args()
     
     print(f'Loading dataset {args.data} and model {args.model}')
@@ -72,12 +72,16 @@ if __name__ == "__main__":
     filename = 'results.csv'
     file_exists = os.path.isfile(filename)
     with open(filename, mode='a', newline='') as file:
-        fieldnames = ['name', 'accuracy', 'correct_tags', 'total_tags', 'description']
+        fieldnames = ['data', 'testfile', 'model', 'percentage', 'tagdict', 'accuracy', 'correct_tags', 'total_tags', 'description']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
         writer.writerow({
-            'name': args.data, 
+            'data': args.data, 
+            'testfile': args.testfile, 
+            'model': args.model, 
+            'percentage': args.percentage, 
+            'tagdict': args.tagdict, 
             'accuracy': accuracy, 
             'correct_tags': correct,
             'total_tags': tags,
