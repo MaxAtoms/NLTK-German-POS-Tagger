@@ -8,4 +8,5 @@ fi
 
 pipenv install
 ./get_corpora.sh
-./train_eval.sh
+./training.sh
+./evaluation.sh

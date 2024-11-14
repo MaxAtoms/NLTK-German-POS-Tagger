@@ -209,7 +209,7 @@ class PerceptronTagger(TaggerI):
 
         return output
 
-    def train(self, sentences, data, save_loc=None, nr_iter=5):
+    def train(self, sentences, data, model_number, save_loc=None, nr_iter=5):
         """Train a model from sentences, and save it at ``save_loc``. ``nr_iter``
         controls the number of Perceptron training iterations.
 
@@ -258,19 +258,15 @@ class PerceptronTagger(TaggerI):
         self.model.average_weights()
         # Save to json files.
         if save_loc is not None:
-            self.save_to_json(save_loc, data)
+            self.save_to_json(save_loc, data, model_number)
     
-    def save_to_json(self, loc, data, lang="deu"):
+    def save_to_json(self, loc, data, model_number, lang="deu"):
         base_dir = os.path.join(loc, f"averaged_perceptron_tagger_{lang}/{data}")
         
         if not os.path.exists(base_dir):
             os.makedirs(base_dir)
         
-        # Determine the next available model directory
-        existing_model_dirs = [d for d in os.listdir(base_dir) if d.startswith("model")]
-        next_model_number = max([int(d.split('model')[-1]) for d in existing_model_dirs] + [0]) + 1
-        model_dir = os.path.join(base_dir, f"model{next_model_number}")
-    
+        model_dir = os.path.join(base_dir, f"model{model_number}")
         os.makedirs(model_dir)
     
         # Save the JSON files in the model directory
@@ -398,7 +394,7 @@ def load_train_sentences_from_file(file_path):
             train_sentences.append(sentence)
     return train_sentences
 
-def train_perceptron_tagger_german(train_file, data, train_model=True, save_loc=None, nr_iter=5, percentage=100, createfiles=False):
+def train_perceptron_tagger_german(train_file, data, model_number, train_model=True, save_loc=None, nr_iter=5, percentage=100, createfiles=False):
 
     if createfiles:
         train_sentences, test_sentences = load_conll(train_file, percentage)
@@ -437,7 +433,7 @@ def train_perceptron_tagger_german(train_file, data, train_model=True, save_loc=
         # Train the tagger
         tagger = PerceptronTagger(load=False, lang='deu')
 
-        tagger.train(train_sentences, data, save_loc=save_loc, nr_iter=nr_iter)
+        tagger.train(train_sentences, data, model_number, save_loc=save_loc, nr_iter=nr_iter)
 
         return tagger
     else:
@@ -478,6 +474,7 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", type=str, default="corpora/tiger_release_aug07.corrected.16012013.conll09", help="Dataset filename")
     parser.add_argument("--iter", type=int, default=1, help="Number of iterations")
     parser.add_argument("--percentage", type=int, default=90, help="Percentage of the dataset used for training")
+    parser.add_argument("--model", type=int, help="Number of the model to train")
 
     args = parser.parse_args()
 
@@ -488,5 +485,5 @@ if __name__ == "__main__":
 
     print(f'Training dataset "{args.data}" for {args.iter} iteration(s) using {args.percentage}% of the dataset')
 
-    german_tagger = train_perceptron_tagger_german(args.dataset, args.data, args.train, save_loc=save_loc, nr_iter=args.iter, percentage=args.percentage, createfiles=args.create)    
+    german_tagger = train_perceptron_tagger_german(train_file=args.dataset, data=args.data, train_model=args.train, model_number=args.model, save_loc=save_loc, nr_iter=args.iter, percentage=args.percentage, createfiles=args.create)    
     print("Training completed and model saved.")

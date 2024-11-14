@@ -166,3 +166,4 @@ datasets/*
 taggers/*
 corpora/*
 results.csv
+*-log*

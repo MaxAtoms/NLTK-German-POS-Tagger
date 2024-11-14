@@ -4,7 +4,7 @@ Results are automatically generated via a GitHub Action and published in [Releas
 
 ## Running directly on your machine
 
-Make sure you have a working Python and [Pipenv](https://pipenv.pypa.io/en/latest/) installation. Execute `./entrypoint.sh`.
+Make sure you have a working GNU Parallel, Python and [Pipenv](https://pipenv.pypa.io/en/latest/) installation. Execute `./entrypoint.sh`.
 
 ## Manual Training
 
