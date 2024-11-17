@@ -1,5 +1,6 @@
 # NLTK-German-POS-Tagger
 
+Our final project report can be found [here](https://github.com/MaxAtoms/NLTK-German-POS-Tagger/blob/b9948d383f2089e7f55405b85d705f788e2dced5/report.pdf).
 Results are automatically generated via a GitHub Action and published in [Releases](https://github.com/MaxAtoms/NLTK-German-POS-Tagger/releases/).
 
 ## Running directly on your machine
